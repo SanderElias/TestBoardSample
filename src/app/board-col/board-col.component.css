@@ -20,3 +20,13 @@ h2 {
   background-color: var(--foreground-accent);
   z-index: +1;
 }
+
+h2 > span {
+  cursor: pointer;
+  font-size: smaller;
+  /* border: 1 px solid green; */
+}
+
+h2 > span:hover {
+  background-color: var(--accent);
+}
