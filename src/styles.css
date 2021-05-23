@@ -1,24 +1,124 @@
 /* Add application styles & imports to this file! */
 
+:root {
+  --background: #363b4e;
+  --accent: #4f3b78;
+  --foreground: #c4bbf0;
+  --foreground-accent: #927fbf;
+}
+
 html {
   box-sizing: border-box;
   font-size: 16px;
+  background-color: var(--background);
+  color: var(--foreground);
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: inherit;
 }
 
-body, h1, h2, h3, h4, h5, h6, p, ol, ul {
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ol,
+ul {
   margin: 0;
   padding: 0;
 }
 
-ol, ul {
+ol,
+ul {
   list-style: none;
 }
 
 img {
   max-width: 100%;
   height: auto;
+}
+
+*::-webkit-scrollbar {
+  width: 12px; /* width of the entire scrollbar */
+}
+
+*::-webkit-scrollbar-track {
+  background: #4f3b785b; /* color of the tracking area */
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #634a965b; /* color of the scroll thumb */
+  border-radius: 20px; /* roundness of the scroll thumb */
+  border: 3px solid #4f3b785b; /* creates padding around scroll thumb */
+}
+
+button {
+  position: relative;
+
+  display: inline-block;
+  padding: 4px;
+  margin: 5px;
+
+  overflow: hidden;
+
+  border-width: 0;
+  outline: none;
+  border-radius: 2px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+
+  background-color: var(--foreground-accent);
+  color: var(--foreground);
+
+  transition: color 0.3s;
+  cursor: pointer;
+  min-width: 2.5rem;
+}
+
+button:hover,
+button:focus {
+  color: white;
+}
+
+button > * {
+  position: relative;
+}
+
+button span {
+  display: block;
+  padding: 12px 24px;
+}
+
+button:before {
+  content: '';
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  display: block;
+  width: 0;
+  padding-top: 0;
+
+  border-radius: 100%;
+
+  background-color: rgba(239, 236, 241, 0.3);
+
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+button:active:before {
+  width: 120%;
+  padding-top: 120%;
+
+  transition: width 0.2s ease-out, padding-top 0.2s ease-out;
 }

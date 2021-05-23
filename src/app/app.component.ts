@@ -1,4 +1,4 @@
-import { Component, VERSION } from '@angular/core';
+import { Component, OnInit, VERSION } from '@angular/core';
 import { BoardDataService } from './board-data.service';
 
 @Component({
@@ -6,5 +6,9 @@ import { BoardDataService } from './board-data.service';
   templateUrl: './app.component.html',
   styleUrls: [ './app.component.css' ]
 })
-export class AppComponent  {
+export class AppComponent implements OnInit  {
+  ngOnInit() {
+    /** preload popmotion */
+    import('popmotion')
+  }
 }

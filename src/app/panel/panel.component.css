@@ -1,17 +1,16 @@
 :host {
   display: block;
   position: relative;
-  background-color: rgba(79, 115, 170, 0.199);
+  background-color: var(--accent);
   padding: 3px 8px;
   border-radius: 5px;
   margin: 0 3px 4px;
-  min-height: 4rem;
   overflow: hidden;
 }
 
 :host.collapsed {
+  height: 27px;
   min-height: 1rem;
-  height: 1.8rem;
 }
 :host::after {
   position: absolute;
