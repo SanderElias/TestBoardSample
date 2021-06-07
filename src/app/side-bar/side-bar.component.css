@@ -1,0 +1,7 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  background-color: blueviolet;
+  height:97vh;
+  width: 3rem;
+}

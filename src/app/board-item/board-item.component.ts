@@ -8,7 +8,9 @@ import {BoardDataService, Item} from '../board-data.service';
   selector: 'app-board-item',
   template: ` <app-panel *ngIf="item$ | async as item" [collapsed]="item.collapsed" draggable="true">
     <h3 (click)="toggleCollapse(item)">{{ item.name }}</h3>
-    <pre>{{ item | json }}</pre>
+    <img [src]="item.pic" alt="random image" width=200 height="100" loading="lazy">
+    <!-- <img [src]="item.pic" alt="random image"> -->
+    <p>{{ item.description }}</p>
     <button (click)="remove(item)">🗑</button>
   </app-panel>`,
 })

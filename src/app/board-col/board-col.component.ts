@@ -1,22 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
-import {pluck, switchMap} from 'rxjs/operators';
-import {BoardDataService, Item} from '../board-data.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { pluck, switchMap } from 'rxjs/operators';
+import { BoardDataService, Item } from '../board-data.service';
 
 @Component({
   selector: 'app-board-col',
-  template: `
-    <ng-container *ngIf="item$ | async as item">
-      <h2>
-        {{ item.name }}
-        <span (click)="addOne(item)">+</span>
-        <span (click)="openClose(item, true)">🌂</span>
-        <span (click)="openClose(item, false)">☔</span>
-        <span (click)="openClose(item, 'random')">🎲</span>
-      </h2>
-      <app-board-item *ngFor="let bi of item.children; trackBy: byId" [itemId]="bi.id"></app-board-item>
-    </ng-container>
-  `,
+  templateUrl: './board-col.component.html',
   styleUrls: ['./board-col.component.css'],
 })
 export class BoardColComponent implements OnInit {
@@ -25,7 +14,7 @@ export class BoardColComponent implements OnInit {
   });
   @Input() set itemId(id: string) {
     if (id) {
-      this.localState.next({...this.localState.value, id});
+      this.localState.next({ ...this.localState.value, id });
     }
   }
   item$ = this.localState.pipe(
@@ -35,7 +24,7 @@ export class BoardColComponent implements OnInit {
 
   byId = (_, item: Item) => item.id;
 
-  constructor(private data: BoardDataService) {}
+  constructor(private data: BoardDataService) { }
 
   addOne(item: Item) {
     // const curentState = typeof items['allClosed'] === 'boolean' ? items['allClosed'] : false;
@@ -51,5 +40,5 @@ export class BoardColComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 }

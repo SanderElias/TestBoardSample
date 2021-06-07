@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {del, set, clear, entries} from 'idb-keyval';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {distinctUntilChanged, filter, map} from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { clear, del, entries, set } from 'idb-keyval';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 
 const lower = 'abcdefghijklmnopqrstuvwxyz';
 const tokens = lower + lower.toUpperCase() + '0123456789';
@@ -9,14 +9,18 @@ const tokenLen = tokens.length;
 const rand = (amount = 20, min = 0) => Math.floor(Math.random() * amount) + min;
 
 const token = () => tokens[rand(tokenLen)];
-const genId = () => Array.from({length: 8}, () => token()).join('');
-
-function createItem(o: string, parentId = 'root'): StoreItem {
+const genId = () => Array.from({ length: 8 }, () => token()).join('');
+let seed = 0
+async function createItem(o: string, parentId = 'root'): Promise<StoreItem> {
+  const faker = await import('faker');
+  o = o ? o : faker.commerce.productName();
   return {
     id: genId(),
     parentId,
     collapsed: Math.random() < 0.5 ? false : true,
     name: o,
+    pic: `https://picsum.photos/200/100.webp?seed=${++seed}`,
+    description: faker.commerce.productDescription(),
     children: [],
   } as StoreItem;
 }
@@ -25,6 +29,7 @@ interface BaseItem {
   id: string;
   parentId: string;
   collapsed: boolean;
+  pic: string;
   active?: boolean;
   name: string;
   description?: string;
@@ -41,7 +46,7 @@ interface DataStore {
   [id: string]: StoreItem;
 }
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class BoardDataService {
   #boardSub = new BehaviorSubject<DataStore>({});
   board$ = this.#boardSub.pipe(
@@ -84,8 +89,9 @@ export class BoardDataService {
   //   }
   // };
 
-  addItem(parentId = 'root'): void {
-    this.saveItem(createItem('new Item', parentId) as unknown as Item);
+  async addItem(parentId = 'root') {
+    const newItem = (await createItem('', parentId)) as unknown as Item;
+    this.saveItem(newItem);
   }
 
   removeItem(item: Item) {
@@ -102,6 +108,11 @@ export class BoardDataService {
     board[item.id] = undefined;
     del(item.id).catch();
     this.updateBoard(board);
+  }
+
+  async addRandomItems(n: number, parent = 'root') {
+    const board = this.#boardSub.value;
+    this.updateBoard(await addItems(board, n, parent))
   }
 
   saveItem(item: Item): void {
@@ -133,8 +144,8 @@ export class BoardDataService {
 async function generateNewBoard(): Promise<DataStore> {
   await clear();
   const ds: DataStore = {};
-  const root = createItem('root');
-  const children = Array.from({length: rand(5, 3)}, (_, o) => createItem(`type ${o}`, 'root'));
+  const root = await createItem('root');
+  const children = await Promise.all(Array.from({ length: rand(5, 3) }, (_, o) => createItem(`type ${o}`, 'root')));
   root.children = children.map(ch => ch.id);
   set('root', root);
   ds['root'] = root;
@@ -148,14 +159,16 @@ async function generateNewBoard(): Promise<DataStore> {
   return ds;
 }
 
-async function addItems(ds: DataStore, n = 500) {
-  const {children: master} = ds['root'];
+async function addItems(ds: DataStore, n = 1000, parent = 'root') {
+  const faker = await import('faker');
+
+  const { children: master } = ds[parent];
   const max = master.length;
   const i = Object.keys(ds).length;
   console.log(`Adding ${n} items`);
   while (--n) {
     const parentId = master[Math.floor(Math.random() * max)];
-    const newChild = createItem(`item ${i + n}`, parentId);
+    const newChild = await createItem(`${faker.commerce.productName()} ${i + n}`, parentId);
     ds[parentId].children.push(newChild.id);
     ds[newChild.id] = newChild;
     await set(parentId, ds[parentId]);
@@ -171,7 +184,7 @@ async function addItems(ds: DataStore, n = 500) {
 async function restoreFromLocalStorage(): Promise<DataStore> {
   try {
     const rawData = await entries();
-    if (rawData) {
+    if (rawData && rawData.length > 0) {
       return rawData.reduce((ds, [key, val]: [string, StoreItem]) => {
         ds[key] = val;
         return ds;

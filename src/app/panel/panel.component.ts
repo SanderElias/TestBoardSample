@@ -38,7 +38,7 @@ export class PanelCollapsedDirective {
       }
       if (typeof this.#lastState === 'boolean' && this.#lastState !== isCollapsed) {
         console.log('needs animation');
-        this.#animate(isCollapsed);
+        // this.#animate(isCollapsed);
       }
       this.#lastState = isCollapsed;
     }

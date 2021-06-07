@@ -4,8 +4,17 @@
   /** todo calculat based on columns */
   min-width: 400vw;
   overflow-y: scroll;
-  grid-template-columns: repeat(auto-fill, 240px);
+  grid-template-columns:  3rem repeat(auto-fill, 240px);
   gap: 12px;
   margin: 5px;
 }
 
+app-side-bar {
+  position: sticky;
+  left: 0;
+}
+
+button {
+  width: 2.7rem;
+  height:2.7rem;
+}

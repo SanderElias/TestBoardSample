@@ -12,7 +12,7 @@ h2 {
   text-align: center;
   width: 97%;
   border-bottom: 2px solid var(--background);
-  box-shadow: 0 0 0 5px  var(--foreground-accent);
+  box-shadow: 0 0 0 5px var(--foreground-accent);
   padding-bottom: 2px;
   margin-bottom: 6px;
   position: sticky;
@@ -29,4 +29,8 @@ h2 > span {
 
 h2 > span:hover {
   background-color: var(--accent);
+}
+
+cdk-virtual-scroll-viewport {
+  height: 94vh;
 }

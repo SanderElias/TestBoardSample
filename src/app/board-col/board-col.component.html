@@ -1,0 +1,29 @@
+<ng-container *ngIf="item$ | async as item">
+  <h2>
+    {{ item.name }}
+    <span
+      (click)="addOne(item)"
+      title='add one item'
+    >+</span>
+    <span
+      (click)="openClose(item, true)"
+      title='close all'
+    >🌂</span>
+    <span
+      (click)="openClose(item, false)"
+      title='open all'
+    >☔</span>
+    <span
+      (click)="openClose(item, 'random')"
+      title='open random'
+    >🎲</span>
+    <span>{{item.children.length}}</span>
+  </h2>
+  <cdk-virtual-scroll-viewport autosize>
+    <app-board-item
+      *cdkVirtualFor="let bi of item.children; trackBy: byId"
+      [itemId]="bi.id"
+    ></app-board-item> 
+    </cdk-virtual-scroll-viewport>
+    <!-- <app-board-item *ngFor="let bi of item.children" [itemId]="bi.id" ></app-board-item> -->
+</ng-container>
